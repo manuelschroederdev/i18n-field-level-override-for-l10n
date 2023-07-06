@@ -1,1 +1,1 @@
-# The Storyblok Nuxt Ultimate Tutorial: Part 1
+# Storyblok field level translation with override for l10n
