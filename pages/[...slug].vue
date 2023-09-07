@@ -5,19 +5,15 @@ const language = query.lang
 
 const storyblokApi = useStoryblokApi()
 const story = ref(null)
-
-console.log('cdn/stories/localization/' + language + '/' + slug)
-
-//stories/localization/de/an-example-landing-page
+const l10nOverride = ref(false)
 
 try {
-  const { data } = await storyblokApi.get(
-    'cdn/stories/localization/' + language + '/' + slug,
-    { version: 'draft' }
-  )
+  const { data } = await storyblokApi.get('cdn/stories/localization/' + language + '/' + slug, { version: 'draft' })
   story.value = data.story
+  l10nOverride.value = true
 } catch {
   console.log('No l10n available for this language version of this story.')
+  l10nOverride.value = false
   const { data } = await storyblokApi.get('cdn/stories/' + slug, {
     version: 'draft',
     language,
@@ -31,5 +27,6 @@ onMounted(() => {
 </script>
 
 <template>
+  <LocalizationInfo v-if="l10nOverride" :full_slug="story.full_slug" />
   <StoryblokComponent v-if="story" :blok="story.content" />
 </template>
